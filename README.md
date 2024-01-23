@@ -1,4 +1,4 @@
-#Picture Puzzle game
+# Picture Puzzle game
 
 Simple picture puzzle game written in Java using IntelliJ.
 
