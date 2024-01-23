@@ -6,6 +6,6 @@ Try to arrange the tiles in the left panel to match the picture in the right pan
 
 Game checks for completion after each move and congratulates you when done.
 
-Chosen tiles may be unselected.
+First chosen tile (greyed out) may be unselected.
 
 Clicking the "New Game" button brings up a randomly selected image.
