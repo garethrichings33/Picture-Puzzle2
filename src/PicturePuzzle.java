@@ -12,21 +12,21 @@ public class PicturePuzzle implements ActionListener {
         new PicturePuzzle();
     }
 
-    private JFrame frame;
-    private JFrame winFrame;
+    private final JFrame frame;
+    private final JFrame winFrame;
     private JButton targetImage;
-    private JButton[][] gridButtons;
-    private JLabel moveCounter;
-    private int[][] tileIcons = new int[3][3];
+    private final JButton[][] gridButtons;
+    private final JLabel moveCounter;
+    private final int[][] tileIcons = new int[3][3];
 //    private String imageRoot = "src/pictures/picture";
-    private String imageRoot = "pictures/picture";
+    private final String imageRoot = "pictures/picture";
     private String imageFileName;
-    private Random random = new Random();
+    private final Random random = new Random();
     private ImageIcon image;
     private final int mainImageWidth = 100;
     private final int mainImageHeight = 100;
     private int numberOfMoves ;
-    private JLabel winMessage;
+    private final JLabel winMessage;
     private int firstRow;
     private int firstColumn;
     private int secondRow;
@@ -191,13 +191,13 @@ public class PicturePuzzle implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         String buttonPressed = event.getActionCommand();
 
-        if(buttonPressed == "New Game"){
+        if(buttonPressed.equals("New Game")){
             setTargetImage();
             newGrid();
             numberOfMoves = 0;
             setMoveCounter();
         }
-        else if(buttonPressed == "Deselect"){
+        else if(buttonPressed.equals("Deselect")){
             gridButtons[firstRow][firstColumn].setEnabled(true);
             firstRow = -1;
             firstColumn = -1;
