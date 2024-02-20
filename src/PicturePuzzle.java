@@ -144,7 +144,6 @@ public class PicturePuzzle implements ActionListener {
         try{
             fullImage = ImageIO
                     .read(stream);
-//            fullImage = ImageIO.read(new File(imageFileName));
         }
         catch (IOException excp){}
 
@@ -192,53 +191,73 @@ public class PicturePuzzle implements ActionListener {
         String buttonPressed = event.getActionCommand();
 
         if(buttonPressed.equals("New Game")){
-            setTargetImage();
-            newGrid();
-            numberOfMoves = 0;
-            setMoveCounter();
+            newGame();
         }
         else if(buttonPressed.equals("Deselect")){
-            gridButtons[firstRow][firstColumn].setEnabled(true);
-            firstRow = -1;
-            firstColumn = -1;
+            deselectTile();
         }
         else if(firstRow == -1){
-            firstRow = Integer.parseInt(String.valueOf(buttonPressed.charAt(0)));
-            firstColumn = Integer.parseInt(String.valueOf(buttonPressed.charAt(1)));
-            gridButtons[firstRow][firstColumn].setEnabled(false);
+            selectFirstTile(buttonPressed);
         }
         else{
-            secondRow = Integer.parseInt(String.valueOf(buttonPressed.charAt(0)));
-            secondColumn = Integer.parseInt(String.valueOf(buttonPressed.charAt(1)));
-
-//          Valid swap with adjacent tiles in same row or column i.e. not diagonal.
-            if((Math.abs(secondRow - firstRow) == 1
-                    && Math.abs(secondColumn - firstColumn) == 0)
-                    || (Math.abs(secondRow - firstRow) == 0
-                    && Math.abs(secondColumn - firstColumn) == 1)) {
-
-                Icon tempIcon = gridButtons[firstRow][firstColumn].getIcon();
-                gridButtons[firstRow][firstColumn]
-                        .setIcon(gridButtons[secondRow][secondColumn].getIcon());
-                gridButtons[secondRow][secondColumn].setIcon(tempIcon);
-
-                int temp = tileIcons[secondRow][secondColumn];
-                tileIcons[secondRow][secondColumn] = tileIcons[firstRow][firstColumn];
-                tileIcons[firstRow][firstColumn] = temp;
-
-                numberOfMoves++;
+            selectSecondTile(buttonPressed);
+            if(areTilesAdjacent()) {
+                performMove();
                 setMoveCounter();
-
-                gridButtons[firstRow][firstColumn].setEnabled(true);
-                firstRow = -1;
-                firstColumn = -1;
-
-                if(checkWin()) {
-                    winMessage.setText("Congratulations! You won in " + numberOfMoves + " moves.");
-                    winFrame.setVisible(true);
-                }
+                deselectTile();
+                if(checkWin())
+                    confirmWin();
             }
         }
+    }
+
+    private void performMove() {
+        Icon tempIcon = gridButtons[firstRow][firstColumn].getIcon();
+        gridButtons[firstRow][firstColumn]
+                .setIcon(gridButtons[secondRow][secondColumn].getIcon());
+        gridButtons[secondRow][secondColumn].setIcon(tempIcon);
+
+        int temp = tileIcons[secondRow][secondColumn];
+        tileIcons[secondRow][secondColumn] = tileIcons[firstRow][firstColumn];
+        tileIcons[firstRow][firstColumn] = temp;
+
+        numberOfMoves++;
+    }
+
+    private void confirmWin() {
+        winMessage.setText("Congratulations! You won in " + numberOfMoves + " moves.");
+        winFrame.setVisible(true);
+    }
+
+    private boolean areTilesAdjacent() {
+        return (Math.abs(secondRow - firstRow) == 1
+                && Math.abs(secondColumn - firstColumn) == 0)
+                || (Math.abs(secondRow - firstRow) == 0
+                && Math.abs(secondColumn - firstColumn) == 1);
+    }
+
+    private void selectSecondTile(String buttonPressed) {
+        secondRow = Integer.parseInt(String.valueOf(buttonPressed.charAt(0)));
+        secondColumn = Integer.parseInt(String.valueOf(buttonPressed.charAt(1)));
+    }
+
+    private void selectFirstTile(String buttonPressed) {
+        firstRow = Integer.parseInt(String.valueOf(buttonPressed.charAt(0)));
+        firstColumn = Integer.parseInt(String.valueOf(buttonPressed.charAt(1)));
+        gridButtons[firstRow][firstColumn].setEnabled(false);
+    }
+
+    private void deselectTile() {
+        gridButtons[firstRow][firstColumn].setEnabled(true);
+        firstRow = -1;
+        firstColumn = -1;
+    }
+
+    private void newGame() {
+        setTargetImage();
+        newGrid();
+        numberOfMoves = 0;
+        setMoveCounter();
     }
 
     private boolean checkWin() {
