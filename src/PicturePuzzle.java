@@ -166,7 +166,7 @@ public class PicturePuzzle implements ActionListener {
                     }
                 }
 
-                ImageIcon icon = getTileImage(xSize, ySize, fullImage, widthOffset, heightOffset, tileWidth, tileHeight);
+                var icon = getTileImage(xSize, ySize, fullImage, widthOffset, heightOffset, tileWidth, tileHeight);
 
                 if(gridButtons[row][column] == null)
                     createImageTile(xSize, ySize, xPosition, yPosition, row, column, icon);
