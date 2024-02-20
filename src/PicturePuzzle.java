@@ -165,25 +165,43 @@ public class PicturePuzzle implements ActionListener {
                         break;
                     }
                 }
-                BufferedImage partImage
-                        = fullImage.getSubimage(widthOffset*tileWidth,heightOffset*tileHeight,tileWidth,tileHeight);
 
-                ImageIcon icon = new ImageIcon(partImage.getScaledInstance(xSize,ySize,Image.SCALE_DEFAULT));
-                if(gridButtons[row][column] == null){
-                    gridButtons[row][column] = new JButton(icon);
-                    gridButtons[row][column].setBounds(xPosition, yPosition, xSize, ySize);
-                    gridButtons[row][column].setActionCommand(Integer.toString(row) + Integer.toString(column));
-                    gridButtons[row][column].addActionListener(this);
-                    gridButtons[row][column].setName("button" + row + column);
-                    frame.add(gridButtons[row][column]);
-                }
+                ImageIcon icon = getTileImage(xSize, ySize, fullImage, widthOffset, heightOffset, tileWidth, tileHeight);
+
+                if(gridButtons[row][column] == null)
+                    createImageTile(xSize, ySize, xPosition, yPosition, row, column, icon);
                 else
-                    gridButtons[row][column].setIcon(icon);
+                    setImageTile(row, column, icon);
 
 //                Keep track of which image is where.
-                tileIcons[row][column] = heightOffset*10 + widthOffset;
+                tileIcons[row][column] = getTileIdentifier(widthOffset, heightOffset);
             }
         }
+    }
+
+    private void setImageTile(int row, int column, ImageIcon icon){
+        gridButtons[row][column].setIcon(icon);
+    }
+
+    private int getTileIdentifier(int widthOffset, int heightOffset) {
+        return heightOffset * 10 + widthOffset;
+    }
+
+    private void createImageTile(int xSize, int ySize, int xPosition, int yPosition, int row, int column, ImageIcon icon) {
+        gridButtons[row][column] = new JButton(icon);
+        gridButtons[row][column].setBounds(xPosition, yPosition, xSize, ySize);
+        gridButtons[row][column].setActionCommand(Integer.toString(row) + Integer.toString(column));
+        gridButtons[row][column].addActionListener(this);
+        gridButtons[row][column].setName("button" + row + column);
+        frame.add(gridButtons[row][column]);
+    }
+
+    private ImageIcon getTileImage(int xSize, int ySize, BufferedImage fullImage, int widthOffset, int heightOffset, int tileWidth, int tileHeight) {
+        BufferedImage partImage
+                = fullImage.getSubimage(widthOffset * tileWidth, heightOffset * tileHeight, tileWidth, tileHeight);
+
+        ImageIcon icon = new ImageIcon(partImage.getScaledInstance(xSize, ySize,Image.SCALE_DEFAULT));
+        return icon;
     }
 
     @Override
@@ -264,7 +282,7 @@ public class PicturePuzzle implements ActionListener {
         boolean temp = true;
         for(int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
-                temp = temp && tileIcons[row][column] == (row * 10 + column);
+                temp = temp && tileIcons[row][column] == getTileIdentifier(column, row);
         return temp;
     }
 }
