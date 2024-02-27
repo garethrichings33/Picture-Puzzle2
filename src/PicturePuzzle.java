@@ -114,7 +114,6 @@ public class PicturePuzzle implements ActionListener {
     private ImageIcon setMainImage(String fileName){
         InputStream stream = PicturePuzzle.class.getResourceAsStream(fileName);
         try {
-            assert stream != null;
             return new ImageIcon(ImageIO
                     .read(stream)
                     .getScaledInstance(mainImageWidth, mainImageHeight, Image.SCALE_DEFAULT));
